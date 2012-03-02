@@ -1,0 +1,28 @@
+# -*- coding: utf-8 -*-
+"""maitian data"""
+
+import logging
+from zojstat import model
+from zojstat.model import DBSession, metadata
+from zojstat.model.userstat import UserStat
+from zojstat.model.userreport import UserReport
+
+log = logging.getLogger(__name__)
+
+class ZOJStatController(object):
+	@staticmethod
+	def updateuser(user):
+		log.debug("Updating:"+user)
+
+
+	@staticmethod
+	def gaindata(user):
+		log.debug("Query:"+user)
+		usds 	= DBSession.query(UserStat).filter(UserStat.user==user)
+		report	= []
+		for usd in usds:
+			ur	= UserReport(usd.pid,usd.sid,usd.status,usd.time)
+			report+=ur;
+		
+#		print html.tags.image('/images/rss.png', 'rss syndication')
+		return dict(user=user,zuses=report)
